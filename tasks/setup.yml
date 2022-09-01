@@ -11,11 +11,15 @@
       - openjdk-11-jre-headless 
       - build-essential 
 
-- name: Install python modules
+- name: Install redbot requirements
   pip:
     name:
       - setuptools
       - wheel
+
+- name: Install redbot
+  pip:
+    name:
       - Red-DiscordBot
 
 - name: Create RedBot User
