@@ -1,0 +1,28 @@
+---
+
+- name: Get Repos from Github
+  git:
+    repo: "{{ item.1.url }}"
+    dest: '{{ data_path + "/" + item.0.name + "/cogs/RepoManager/repos/" + item.1.name }}' 
+    force: True
+  when: item.1.name != "local"
+  loop: "{{ redbot|subelements('repos') }}"
+
+- include_tasks:
+    file: cogs_loop.yml
+  loop: "{{ redbot| subelements('repos') }}"
+  loop_control:
+    loop_var: current_redbot
+  vars:
+    current_redbot_name: "{{ current_redbot[0]['name'] }}"
+    current_redbot_repo: "{{ current_redbot[1]['name'] }}"
+
+- name: Activate Cog(s)
+  copy:
+    content: |
+      cogs={{cogs | join(' ')}}
+    dest: /etc/systemd/system/redbot@{{current_redbot.name}}.conf
+  loop: "{{ redbot }}"
+  loop_control:
+    loop_var: current_redbot
+# CHECK IF THERES A COG THATS NOT ACTIVE 

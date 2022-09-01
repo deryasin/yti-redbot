@@ -1,0 +1,17 @@
+---
+
+- name: Install Cog(s)
+  copy:
+    src: '{{ data_path + "/" + current_redbot_name + "/cogs/RepoManager/repos/" + current_redbot_repo + "/" + current_redbot_cog }}'
+    dest: '{{ data_path + "/" + current_redbot_name + "/cogs/CogManager/cogs"}}'
+    remote_src: true
+  when: current_redbot_repo != "local"
+  loop: "{{ current_redbot[1]['cogs'] }}"
+  loop_control:
+    loop_var: current_redbot_cog
+
+- name: Load Cog(s)
+  set_fact:
+    cogs: "{{ cogs | default({}) | combine( {current_redbot[0]['name']: cogs[current_redbot[0]['name']]|default([]) + current_redbot[1]['cogs']} ) }}"
+
+

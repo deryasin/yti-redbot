@@ -1,0 +1,24 @@
+---
+
+- name: Copy RedBot systemd unit file into place.
+  template:
+    src: redbot@.unit.j2
+    dest: /etc/systemd/system/redbot@.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure the RedBot service.
+  service:
+    name: "{{ 'redbot' + '@' + item['name'] }}"
+    state: "{{ item['settings']['state'] }}"
+    enabled: "{{ item['settings']['onboot'] }}"
+  loop: "{{ redbot }}"
+  
+- name: Restart the RedBot Service.
+  service:
+    name: "{{ 'redbot' + '@' + item['name'] }}"
+    state: restarted
+    daemon_reload: true
+    enabled: "{{ item['settings']['onboot'] }}"
+  loop: "{{ redbot }}"

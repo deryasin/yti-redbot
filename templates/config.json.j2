@@ -1,0 +1,11 @@
+{
+{% for entry in redbot %}
+    "{{entry["name"]}}": {
+        "DATA_PATH": "{{data_path}}/{{entry["name"]}}",
+        "COG_PATH_APPEND": "cogs",
+        "CORE_PATH_APPEND": "core",
+        "STORAGE_TYPE": "JSON",
+        "STORAGE_DETAILS": {}
+    }{{ "," if not loop.last }}
+{% endfor %}
+}
