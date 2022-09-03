@@ -20,7 +20,7 @@
 - name: Activate Cog(s)
   copy:
     content: |
-      cogs={{cogs | join(' ')}}
+      cogs={{cogs[current_redbot.name]|join(' ')}}
     dest: /etc/systemd/system/redbot@{{current_redbot.name}}.conf
   loop: "{{ redbot }}"
   loop_control:
